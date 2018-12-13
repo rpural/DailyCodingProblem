@@ -1,6 +1,6 @@
 .vscode
 Python.zip
-pycache__
+__pycache__
 binary.data
 cloud_large.png
 ex5/distances.txt

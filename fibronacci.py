@@ -62,7 +62,7 @@ def FibronacciLoopCached(value):
         if cached != None:
             product *= cached
             fibcache.set(value, product)
-            return product * cached
+            return product
 
         product *= i
     

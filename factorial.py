@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 '''
-    Calculate the Fibronacci sequence, in order to test several 
+    Calculate factorials, in order to test several 
     theories and features.
 
     The first calculation method uses recursion, and a niave 
@@ -19,29 +19,29 @@
 
 import cache
 
-fibcache = cache.Cache(6000) # Enough to cover the entire problem space
+faccache = cache.Cache(6000) # Enough to cover the entire problem space
 
-def FibronacciCached(value):
+def FactorialCached(value):
     if value <= 1:
         return 1
 
-    cached = fibcache.get(value)
+    cached = faccache.get(value)
     if cached != None:
         return cached
 
-    fib = value * FibronacciCached(value - 1)
-    fibcache.set(value, fib)
+    fib = value * FactorialCached(value - 1)
+    faccache.set(value, fib)
     return fib
 
 
-def FibronacciUncached(value):
+def FactorialUncached(value):
     if value <= 1:
         return 1
 
-    return value * FibronacciUncached(value - 1)
+    return value * FactorialUncached(value - 1)
 
 
-def FibronacciLoop(value):
+def FactorialLoop(value):
     if value <= 1:
         return 1
     
@@ -52,21 +52,21 @@ def FibronacciLoop(value):
     return product
 
 
-def FibronacciLoopCached(value):
+def FactorialLoopCached(value):
     if value <= 1:
         return 1
 
     product = 1
     for i in range(value, 1, -1):
-        cached = fibcache.get(i)
+        cached = faccache.get(i)
         if cached != None:
             product *= cached
-            fibcache.set(value, product)
+            faccache.set(value, product)
             return product
 
         product *= i
     
-    fibcache.set(value, product)
+    faccache.set(value, product)
     return product
 
 
@@ -81,44 +81,44 @@ n = 5000
 
 with timer.Timer() as clock:
     for i in range(n):
-        j = FibronacciUncached(i)
+        j = FactorialUncached(i)
 
-print(f"Calculating the first {n} Fibronacci values, uncached: {clock.interval} seconds.")
-
-with timer.Timer() as clock:
-    for i in range(n):
-        j = FibronacciCached(i)
-
-print(f"Calculating the first {n} Fibronacci values, cached: {clock.interval} seconds.")
-
-fibcache = cache.Cache(1000)
+print(f"Calculating the first {n} factorials, uncached: {clock.interval} seconds.")
 
 with timer.Timer() as clock:
     for i in range(n):
-        j = FibronacciCached(i)
+        j = FactorialCached(i)
 
-print(f"Calculating the first {n} Fibronacci values, cache size 1000: {clock.interval} seconds.")
+print(f"Calculating the first {n} factorials, cached: {clock.interval} seconds.")
+
+faccache = cache.Cache(1000)
 
 with timer.Timer() as clock:
     for i in range(n):
-        j = FibronacciLoop(i)
+        j = FactorialCached(i)
 
-print(f"Calculating the first {n} Fibronacci values, tail-recusion unrolled: {clock.interval} seconds.")
+print(f"Calculating the first {n} factorials, cache size 1000: {clock.interval} seconds.")
+
+with timer.Timer() as clock:
+    for i in range(n):
+        j = FactorialLoop(i)
+
+print(f"Calculating the first {n} factorials, tail-recusion unrolled: {clock.interval} seconds.")
 
 # cache._debug_ = True
 
-fibcache = cache.Cache(6000)
+faccache = cache.Cache(6000)
 
 with timer.Timer() as clock:
     for i in range(n):
-        j = FibronacciLoopCached(i)
+        j = FactorialLoopCached(i)
 
-print(f"Calculating the first {n} Fibronacci values, tail-recusion unrolled, cached: {clock.interval} seconds.") 
+print(f"Calculating the first {n} factorials, tail-recusion unrolled, cached: {clock.interval} seconds.") 
 
-fibcache = cache.Cache(1000)
+faccache = cache.Cache(1000)
 
 with timer.Timer() as clock:
     for i in range(n):
-        j = FibronacciLoopCached(i)
+        j = FactorialLoopCached(i)
 
-print(f"Calculating the first {n} Fibronacci values, tail-recusion unrolled, cache size 1000: {clock.interval} seconds.") 
+print(f"Calculating the first {n} factorials, tail-recusion unrolled, cache size 1000: {clock.interval} seconds.") 

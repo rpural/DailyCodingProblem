@@ -79,17 +79,25 @@ sys.setrecursionlimit(10**6)
 n = 5000
 #n = 10
 
+results = []
+
+print(f"Each set calculates the factorial of the first {n} integers, producing times for each.\n")
+
 with timer.Timer() as clock:
     for i in range(n):
         j = FactorialUncached(i)
 
-print(f"Calculating the first {n} factorials, uncached: {clock.interval} seconds.")
+results.append(j)
+
+print(f"Uncached: {clock.interval:.4} seconds.")
 
 with timer.Timer() as clock:
     for i in range(n):
         j = FactorialCached(i)
 
-print(f"Calculating the first {n} factorials, cached: {clock.interval} seconds.")
+results.append(j)
+
+print(f"Cache size 6000: {clock.interval:.4} seconds.")
 
 faccache = cache.Cache(1000)
 
@@ -97,13 +105,17 @@ with timer.Timer() as clock:
     for i in range(n):
         j = FactorialCached(i)
 
-print(f"Calculating the first {n} factorials, cache size 1000: {clock.interval} seconds.")
+results.append(j)
+
+print(f"Cache size 1000: {clock.interval:.4} seconds.")
 
 with timer.Timer() as clock:
     for i in range(n):
         j = FactorialLoop(i)
 
-print(f"Calculating the first {n} factorials, tail-recusion unrolled: {clock.interval} seconds.")
+results.append(j)
+
+print(f"Uncached, tail-recusion unrolled: {clock.interval:.4} seconds.")
 
 # cache._debug_ = True
 
@@ -113,7 +125,9 @@ with timer.Timer() as clock:
     for i in range(n):
         j = FactorialLoopCached(i)
 
-print(f"Calculating the first {n} factorials, tail-recusion unrolled, cached: {clock.interval} seconds.") 
+results.append(j)
+
+print(f"Cache size 6000, tail-recusion unrolled: {clock.interval:.4} seconds.") 
 
 faccache = cache.Cache(1000)
 
@@ -121,4 +135,12 @@ with timer.Timer() as clock:
     for i in range(n):
         j = FactorialLoopCached(i)
 
-print(f"Calculating the first {n} factorials, tail-recusion unrolled, cache size 1000: {clock.interval} seconds.") 
+results.append(j)
+
+print(f"Cache size 1000, tail-recusion unrolled: {clock.interval:.4} seconds.") 
+
+j = results[0]
+for k in results[1:]:
+    if k != j:
+        print("Problem found in the results.")
+

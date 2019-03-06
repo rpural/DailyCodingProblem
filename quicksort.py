@@ -17,13 +17,13 @@ def quicksort(original):
     tail = len(l) - 1
 
     try:
-        while (tail - head) > 1:
-            while l[head] < l[pivot]:
-                head += 1
-            while l[tail] > l[pivot]:
-                tail -= 1
-            if l[head] > l[tail]:
-                (l[head], l[tail]) = (l[tail],l[head])
+        while head <= tail and l[head] < l[pivot]:
+            head += 1
+        while head <= tail and l[tail] > l[pivot]:
+            tail -= 1
+
+        if l[head] > l[tail]:
+            (l[head], l[tail]) = (l[tail],l[head])
         (l[head], l[pivot]) = (l[pivot], l[head])
     except IndexError:
         print("Index error:")
@@ -32,7 +32,10 @@ def quicksort(original):
 
     lhead = list(l[:head])
     ltail = list(l[tail:])
-    l = quicksort(lhead) + [l[head]] + quicksort(ltail)
+    try:
+        l = quicksort(lhead) + [l[head]] + quicksort(ltail)
+    except RecursionError:
+        print(f"list = {l}, head  = {head}, tail = {tail}, pivot = {pivot}\nlhead = {lhead}, head = {l[head]}, ltail = {ltail}")
 
     return l
 

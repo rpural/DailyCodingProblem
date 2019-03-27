@@ -2,9 +2,6 @@
 
 ''' Daily Coding Problem
 
-    
-    Good morning! Here's your coding interview problem for today.
-
     This problem was asked by Cisco.
 
     Given an unsigned 8-bit integer, swap its even and odd bits. The 1st and 2nd bit should be swapped,
@@ -16,7 +13,19 @@
 '''
 
 bin1 = "10101010"  #  should be 01010101 
-bin2 = "11100010"  #  should be 11010001.
+bin2 = "11100010"  #  should be 11010001
+
+def swaps(bitmap):
+    result = ""
+    
+    while len(bitmap) > 0:
+        result +=  bitmap[1:2] + bitmap[:1]
+        bitmap = bitmap[2:]
+
+    return result
+
+print("{} swapped = {}".format(bin1, swaps(bin1)))
+print("{} swapped = {}".format(bin2, swaps(bin2)))
 
 
 

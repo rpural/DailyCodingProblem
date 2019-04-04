@@ -16,6 +16,17 @@ def bubble_sort(nums):
                 swapped = True
 
 
+def shuffle_sort(nums):  
+    i = 0
+    while i < len(nums) - 1:
+            if nums[i] > nums[i + 1]:
+                # Swap the elements
+                nums[i], nums[i + 1] = nums[i + 1], nums[i]
+                i -= 2
+                if i < 0: i = 0
+            i += 1
+
+
 def selection_sort(nums):  
     # This value of i corresponds to how many values were sorted
     for i in range(len(nums)):
@@ -180,6 +191,12 @@ sortlist = initial_list.copy()
 with Timer() as t:
     bubble_sort(sortlist)
 print("   Bubble sort: {:7.03f} sec.".format(t.interval))
+
+
+sortlist = initial_list.copy()
+with Timer() as t:
+    shuffle_sort(sortlist)
+print("  Shuffle sort: {:7.03f} sec.".format(t.interval))
 
 
 sortlist = initial_list.copy()

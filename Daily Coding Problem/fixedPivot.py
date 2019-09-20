@@ -16,8 +16,7 @@ test1 = [ -6, 0, 2, 40 ]
 test2 = [ 1, 5, 7, 8 ]
 
 def hasFixedPoint(l):
-    ls = l.copy()
-    ls.sort()
+    ls = sorted(l)
     for i in range(len(ls)):
         if ls[i] == i:
             return i

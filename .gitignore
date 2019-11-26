@@ -11,3 +11,4 @@ pytest/pytest/pytest.exedore
 *.pyc
 pres.speech
 *.png
+qt/examples/*

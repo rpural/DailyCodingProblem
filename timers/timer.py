@@ -1,12 +1,14 @@
 #! /usr/bin/env python3
 
 import time
+import functools
+from contextlib import ContextDecorator
 
 class TimerError(Exception):
     ''' A custom exception used to report errors in use of the Timer class '''
 
 
-class Timer:
+class Timer(ContextDecorator):
     timers = dict()
 
     def __init__(self, name=None, text="Elapsed time: {:0.4f} seconds", logger=print):
@@ -48,14 +50,3 @@ class Timer:
     def __exit__(self, *exc_info):
         ''' Stop the context manager timer '''
         self.stop()
-
-
-import functools
-
-def timeit(func):
-    @functools.wraps(func)
-    def wrapper_timer(*args, **kwargs):
-        with Timer():
-            result = func(*args, **kwargs)
-        return result
-    return wrapper_timer

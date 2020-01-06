@@ -27,10 +27,12 @@ from collections import Counter
 
 distrib = Counter()
 
-# first, to check the distribution of our source, generate 10000 random numbers
-distrib.update([rand5() for x in range(10000)])
+count = 100000
 
-print(f"Distribution for rand5:  ", end="")
+# first, to check the distribution of our source, generate 10000 random numbers
+distrib.update([rand5() for x in range(count)])
+
+print(f"Distribution for rand5 (ideal would be {count // 5}):  ", end="")
 for i in range(1,6):
     print(f"{i}: {distrib[i]}", end=", ")
 
@@ -40,10 +42,10 @@ print(f"\n  standard deviation: {statistics.pstdev(distrib.values()):0.3f}")
 distrib = Counter()
 
 # now test rand7() to see if it is also evenly distributed
-distrib.update([rand7() for x in range(10000)])
+distrib.update([rand7() for x in range(count)])
 
-print(f"Distribution for rand7:  ", end="")
+print(f"Distribution for rand7 (ideal would be {count // 7}):  ", end="")
 for i in range(1,8):
     print(f"{i}: {distrib[i]}", end=", ")
 
-print(f"\n  standard deviation: {statistics.pstdev(distrib.values()):0.3f}")
+print(f"\n  standard deviation: {statistics.pvariance(distrib.values()):0.3f}")

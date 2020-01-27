@@ -5,7 +5,20 @@
 import socket
 import sys
 
-sock = ( sys.argv[1], int(sys.argv[2]) )
+if len(sys.argv) != 3:
+    print "Usage:"
+    print "  testConnection.py system-name portno"
+    print "     - system-name is the name or IP address of the system you"
+    print "       want to connect to"
+    print "     - portno is the port number to be tested"
+    print "    example: ./testConnection.py rofrpn801a 8080"
+    exit(0)
+
+try:
+    sock = ( sys.argv[1], int(sys.argv[2]) )
+except ValueError:
+    print "Couldn't build an address from what you've given. Is your port number correct?"
+    exit(1)
 
 BUFFER_SIZE = 1024
 MESSAGE = "Hello, World!"

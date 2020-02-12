@@ -26,6 +26,9 @@ class Stack:
         except IndexError:
             return None
 
+    def __str__(self):
+        return f"{self.stack}"
+
 
 # implement a fifo queue using two stacks for data storage
 class Queue:
@@ -55,21 +58,30 @@ class Queue:
             self._reverse()
         return self.stacks[self.direction].pop()
 
+    def __str__(self):
+        if self.direction: # print in the order the values will be dequeued
+            self._reverse()
+        return f"Queue: {self.stacks[self.direction]}"
+
 
 if __name__ == "__main__":
     que = Queue()
 
+    print(que)
     que.enqueue(1)
     que.enqueue(2)
     que.enqueue(3)
     que.enqueue(4)
+    print(que)
     print(que.dequeue())
     print(que.dequeue())
+    print(que)
     que.enqueue(5)
     que.enqueue(6)
+    print(que)
     print(que.dequeue())
     print(que.dequeue())
     print(que.dequeue())
     print(que.dequeue())
     print(que.dequeue())
-
+    print(que)

@@ -13,3 +13,5 @@ pres.speech
 *.png
 qt/examples/*
 test.file
+*.o
+*.dylib

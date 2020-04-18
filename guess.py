@@ -25,10 +25,15 @@ while True:
         mid = low
     elif mid > high:
         mid = high
+
+    if guesses >= 7:
+        print("That was 7 guesses; You Win!")
+        break
+
     guesses += 1
     guess = input(f"My guess:  {mid}.  Enter your response: ")
     if guess == "=":
-        print("I win!")
+        print(f"I win in {guesses} guesses!")
         break
 
 
@@ -38,7 +43,3 @@ while True:
     if guess == ">":
         low = mid + 1
         continue
-
-    if guesses >= 7:
-        print("That was 7 guesses; You Win!")
-        break

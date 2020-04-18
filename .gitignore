@@ -16,3 +16,5 @@ test.file
 *.o
 *.dylib
 *.dat
+*.db
+example.html

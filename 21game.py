@@ -20,6 +20,7 @@ num_stones = 21
 while True:
     print(num_stones * "# ")
     while True:
+        # Get the player's move:
         try:
             player_move = int(input("How many stones would you like to remove?"))
         except ValueError:
@@ -39,10 +40,24 @@ while True:
         print("You win!")
         break
 
+    # Generate the computer's move:
+
+    '''
+    # First pass: create a nieve move (randomly picking 1 or 2)
     print(num_stones * "# ")
     computer_move = random.randint(1, 2)
     if computer_move > num_stones:
         computer_move = num_stones
+    '''
+
+    # Second pass: try to keep the total count odd
+    if num_stones < 3:
+        computer_move = num_stones
+    elif num_stones % 2 == 0: # otherwise, try to keep the count odd
+        computer_move = 1
+    else:
+        computer_move = 2
+
     num_stones -= computer_move
     print(f"Computer removed {computer_move} stones.")
 

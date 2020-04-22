@@ -2,7 +2,8 @@
 
 ''' Python Morsels
 
-I'd like you to write a function that accepts two lists-of-lists of numbers and returns one list-of-lists with each of the corresponding numbers in the two given lists-of-lists added together.
+I'd like you to write a function that accepts two lists-of-lists of numbers and returns one list-of-lists with each of 
+the corresponding numbers in the two given lists-of-lists added together.
 
 It should work something like this:
 
@@ -17,7 +18,8 @@ It should work something like this:
 
     Try to solve this exercise without using any third-party libraries (without using pandas for example).
 
-    Before attempting any bonuses, I'd like you to put some effort into figuring out the clearest and most idiomatic way to solve this problem.
+    Before attempting any bonuses, I'd like you to put some effort into figuring out the clearest and most 
+    idiomatic way to solve this problem.
 
     There are two bonuses this week.
 
@@ -25,7 +27,8 @@ It should work something like this:
 
     >>> add([[1, 9], [7, 3]], [[5, -4], [3, 3]], [[2, 3], [-3, 1]])
     [[8, 8], [7, 7]]
-    For the second bonus, make sure your add function raises a ValueError if the given lists-of-lists aren't all the same shape. ✔️
+    For the second bonus, make sure your add function raises a ValueError if the given lists-of-lists 
+    aren't all the same shape. ✔️
 
     >>> add([[1, 9], [7, 3]], [[1, 2], [3]])
     Traceback (most recent call last):

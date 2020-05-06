@@ -5,7 +5,7 @@
 import argparse
 
 parser = argparse.ArgumentParser(
-        description="smol-pip installs packages.")
+        description="Pip Installs Packages.")
 parser.add_argument(
         "-v",
         "--version",

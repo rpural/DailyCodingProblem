@@ -75,7 +75,7 @@ def country_statistics():
     for _ in range(2):
         del(rows[0])
 
-    print(f"{'country':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}   {'% deaths/pop'}")
+    print(f"{'country':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}   {'% cases/pop'} {'% deaths/pop'}")
     for row in rows:
         th = row.find_all("th")
         if len(th) < 2:
@@ -93,18 +93,21 @@ def country_statistics():
         else:
             pop = '-'
         try:
+            casepct = counts[0] / pop
             deathpct = counts[1] / pop
         except TypeError:
+            casepct = '-'
             deathpct = '-'
 
-        pct = deathpct if deathpct == '-' else f'{deathpct*100:.4f}'
+        casepct = casepct if casepct == '-' else f'{casepct*100:.4f}'
+        deathpct = deathpct if deathpct == '-' else f'{deathpct*100:.4f}'
         if not isinstance(pop, int):
             pop = 0
         for i in range(len(counts)):
             if not isinstance(counts[i], int):
                 counts[i] = 0
         try:
-            print(f"{country:25s} {pop:15,d} {counts[0]:14,d} {counts[1]:14,d}   {pct}")
+            print(f"{country:25s} {pop:15,d} {counts[0]:14,d} {counts[1]:14,d}   {casepct}   {deathpct}")
         except TypeError:
             pass
 
@@ -113,7 +116,7 @@ def state_statistics():
     ''' Get U.S. state CoVID-19 statistics and produce a report '''
     page = requests.get("https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_States")
     soup = bs(page.text, 'html.parser')
-    print(f"{'State':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}   {'% deaths/pop':6s}")
+    print(f"{'State':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}   {'% cases/pop'}   {'% deaths/pop':6s}")
     tbls = soup.find_all("table")
     rows = tbls[5].find_all("tr")
     for _ in range(3):
@@ -135,18 +138,23 @@ def state_statistics():
         else:
             pop = 0
         try:
+            casepct = counts[0] / pop
             deathpct = counts[1] / pop
         except TypeError:
+            casepct = '-'
             deathpct = '-'
         except ValueError:
+            casepct = '-'
             deathpct = '-'
         except ZeroDivisionError:
+            casepct = '-'
             deathpct = '-'
 
-        pct = deathpct if deathpct == '-' else f'{deathpct*100:.4f}'
+        casepct = casepct if casepct == '-' else f'{casepct*100:.4f}'
+        deathpct = deathpct if deathpct == '-' else f'{deathpct*100:.4f}'
         pop = pop if pop == '-' else f'{pop:15,d}'
         try:
-            print(f"{state:25s} {pop:15s} {counts[0]:14,d} {counts[1]:14,d}   {pct}")
+            print(f"{state:25s} {pop:15s} {counts[0]:14,d} {counts[1]:14,d}   {casepct}   {deathpct}")
         except TypeError:
             pass
         except ValueError:
@@ -154,8 +162,12 @@ def state_statistics():
 
 
 if __name__ == "__main__":
+    import datetime
+
     countrypop = country_populations()
     statepop = state_populations()
+
+    print(f"CoVID-19 Statistics as of {datetime.date.today().strftime('%m/%d/%Y')}\n")
 
     print("CoVID-19 Statistics by Country")
     print()

@@ -75,7 +75,7 @@ def country_statistics():
     for _ in range(2):
         del(rows[0])
 
-    print(f"{'country':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}   {'% cases/pop'} {'% deaths/pop'}")
+    print(f"{'country':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}    {'cases/M'}    {'deaths/M'}")
     for row in rows:
         th = row.find_all("th")
         if len(th) < 2:
@@ -93,21 +93,22 @@ def country_statistics():
         else:
             pop = '-'
         try:
-            casepct = counts[0] / pop
-            deathpct = counts[1] / pop
+            popscale = pop / 1_000_000
+            case_per_m = counts[0] / popscale
+            death_per_m = counts[1] / popscale
         except TypeError:
-            casepct = '-'
-            deathpct = '-'
+            case_per_m = '-'
+            death_per_m = '-'
 
-        casepct = casepct if casepct == '-' else f'{casepct*100:.4f}'
-        deathpct = deathpct if deathpct == '-' else f'{deathpct*100:.4f}'
+        case_per_m = "     -   " if case_per_m == '-' else f'{case_per_m:9.3f}'
+        death_per_m = "     -   " if death_per_m == '-' else f'{death_per_m:9.3f}'
         if not isinstance(pop, int):
-            pop = 0
+            pop = 0 
         for i in range(len(counts)):
             if not isinstance(counts[i], int):
                 counts[i] = 0
         try:
-            print(f"{country:25s} {pop:15,d} {counts[0]:14,d} {counts[1]:14,d}   {casepct}   {deathpct}")
+            print(f"{country:25s} {pop:15,d} {counts[0]:14,d} {counts[1]:14,d}   {case_per_m}   {death_per_m}")
         except TypeError:
             pass
 
@@ -116,49 +117,55 @@ def state_statistics():
     ''' Get U.S. state CoVID-19 statistics and produce a report '''
     page = requests.get("https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_States")
     soup = bs(page.text, 'html.parser')
-    print(f"{'State':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}   {'% cases/pop'}   {'% deaths/pop':6s}")
+    print(f"{'State':25s} {'population':>15s} {'cases':>14s} {'deaths':>14s}    {'cases/M'}    {'deaths/M':6s}")
     tbls = soup.find_all("table")
-    rows = tbls[5].find_all("tr")
-    for _ in range(3):
-        del(rows[0]) # Remove headers
-    for row in rows:
-        th = row.find_all("th")
-        if len(th) < 2:
-            break
-        anchor = th[1].find("a")
-        state = anchor.string
-        td = row.find_all("td")
-        counts = []
-        for i in range(2):
-            counts.append(td[i].text)
-        for i in range(len(counts)):
-            counts[i] = remove_commas(counts[i])
-        if state in statepop:
-            pop = statepop[state]
-        else:
-            pop = 0
-        try:
-            casepct = counts[0] / pop
-            deathpct = counts[1] / pop
-        except TypeError:
-            casepct = '-'
-            deathpct = '-'
-        except ValueError:
-            casepct = '-'
-            deathpct = '-'
-        except ZeroDivisionError:
-            casepct = '-'
-            deathpct = '-'
+    # The table has moved around some, so look at the first field of each table and find
+    # the one containing 'COVID-19_pandemic_data/United_States_medical_cases_by_state'
+    for tbl in tbls:
+        row = tbl.find("tr")
+        if "COVID-19 pandemic in the United States by state and territory" in row.text:
+            rows = tbl.find_all("tr")
+            for _ in range(3):
+                del(rows[0]) # Remove headers
+            for row in rows:
+                th = row.find_all("th")
+                if len(th) < 2:
+                    break
+                anchor = th[1].find("a")
+                state = anchor.string
+                td = row.find_all("td")
+                counts = []
+                for i in range(2):
+                    counts.append(td[i].text)
+                for i in range(len(counts)):
+                    counts[i] = remove_commas(counts[i])
+                if state in statepop:
+                    pop = statepop[state]
+                else:
+                    pop = 0
+                try:
+                    popscale = pop / 1_000_000
+                    case_per_m = counts[0] / popscale
+                    death_per_m = counts[1] / popscale
+                except TypeError:
+                    case_per_m = '-'
+                    death_per_m = '-'
+                except ValueError:
+                    case_per_m = '-'
+                    death_per_m = '-'
+                except ZeroDivisionError:
+                    case_per_m = '-'
+                    death_per_m = '-'
 
-        casepct = casepct if casepct == '-' else f'{casepct*100:.4f}'
-        deathpct = deathpct if deathpct == '-' else f'{deathpct*100:.4f}'
-        pop = pop if pop == '-' else f'{pop:15,d}'
-        try:
-            print(f"{state:25s} {pop:15s} {counts[0]:14,d} {counts[1]:14,d}   {casepct}   {deathpct}")
-        except TypeError:
-            pass
-        except ValueError:
-            print(f"{state:25s} {pop} cases: {counts[0]}, {counts[1]} - {pct}")
+                case_per_m = "     -   " if case_per_m == '-' else f'{case_per_m:9.3f}'
+                death_per_m = "     -   " if death_per_m == '-' else f'{death_per_m:9.3f}'
+                pop = pop if pop == '-' else f'{pop:15,d}'
+                try:
+                    print(f"{state:25s} {pop:15s} {counts[0]:14,d} {counts[1]:14,d}   {case_per_m}   {death_per_m}")
+                except TypeError:
+                    pass
+                except ValueError:
+                    print(f"{state:25s} {pop} cases: {counts[0]}, {counts[1]}")
 
 
 if __name__ == "__main__":

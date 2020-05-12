@@ -21,12 +21,19 @@ from bs4 import BeautifulSoup as bs
 def remove_commas(value):
     ''' Utility function:
         Given a string, find and remove the commas from a formatted number,
+        remove any trailing fluff,
         and convert it to an integer. '''
     while value.find(",") > -1:
         value = value[:value.find(",")] + value[value.find(",")+1:]
+    if not value.isnumeric():
+        for i in range(len(value)):
+            if not value[i].isnumeric():
+                value = value[:i]
+                break
     try:
         value = int(value)
     except ValueError:
+        print(f"[debug] value contains {value}")
         pass
     return value
 

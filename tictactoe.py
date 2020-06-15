@@ -6,10 +6,67 @@
 
 import random
 
+def check_for_possible_win(board, actor):
+    ''' Check for possible winning moves, either to block an actor,
+        or to capture the win for the actor.
+    '''
+    for row in range(3):
+        count = 0
+        for col in range(3):
+            if board[row][col] == actor:
+                count += 1
+        if count == 2:
+            for col in range(3):
+                if board[row][col] == ' ':
+                    return (row, col)
+
+    for col in range(3):
+        count = 0
+        for row in range(3):
+            if board[row][col] == actor:
+                count += 1
+        if count == 2:
+            for row in range(3):
+                if board[row][col] == ' ':
+                    return (row, col)
+
+    count = 0
+    for diag in range(3):
+        if board[diag][diag] == actor:
+            count += 1
+    if count == 2:
+        for diag in range(3):
+            if board[diag][diag] == ' ':
+                return (diag, diag)
+
+    count = 0
+    for diag in range(3):
+        if board[diag][2-diag] == actor:
+            count += 1
+    if count == 2:
+        for diag in range(3):
+            if board[diag][2-diag] == ' ':
+                return (diag, 2-diag)
+
+    return (None, None)
+
+
 def get_computer_move(board):
     ''' Choose a square for the computer to put an X in. Return the
         square as a list with two elements: (row, column)
     '''
+
+    # Win, if possible
+    row, col = check_for_possible_win(board, 'X')
+    if row is not None:
+        return (row, col)
+
+    # If no viable win, block, if possible
+    row, col = check_for_possible_win(board, 'O')
+    if row is not None:
+        return (row, col)
+
+    # If we can't win or block, generate a random move
     row = random.randint(0, 2)
     col = random.randint(0, 2)
 
